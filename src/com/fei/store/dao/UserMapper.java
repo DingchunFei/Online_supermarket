@@ -1,7 +1,9 @@
 package com.fei.store.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
+import com.fei.store.domain.AdminUser;
 import com.fei.store.domain.User;
 
 public interface UserMapper {
@@ -31,5 +33,11 @@ public interface UserMapper {
 	public void userLoginCheck(User user) throws SQLException;
 
 	public void userInfo(User user);
+
+	void adminLogin(AdminUser adminUser);
+
+	void adminUserModify(AdminUser adminUser);
+
+	List<User> viewAllUserUI();
 
 }

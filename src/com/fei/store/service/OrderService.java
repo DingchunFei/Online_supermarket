@@ -16,6 +16,8 @@ public interface OrderService {
 
 	void deleteOrder(Order order) throws Exception;
 
+	List<Order> findAllOrders() throws Exception;
+
 
 //	PageModel findMyOrdersWithPage(User user, int curNum)throws Exception;
 //

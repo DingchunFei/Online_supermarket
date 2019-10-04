@@ -1,5 +1,6 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
 <html>
 
@@ -49,9 +50,19 @@
 
 			<c:forEach items="${requestScope.products}" var = "c">
 				<div class="col-md-2" style="text-align:center;height:200px;padding:10px 0px;">
-					<a href="${pageContext.request.contextPath}/ProductServlet?method=findProductByPid&pid=${c.pid}">
-						<img src="${c.pimage}" width="130" height="130" style="display: inline-block;">
-					</a>
+				
+					<c:if test="${loginUser.getType()==0}">
+						<a href="${pageContext.request.contextPath}/ProductServlet?method=findProductByPid&pid=${c.pid}">
+							<img src="${c.pimage}" width="130" height="130" style="display: inline-block;">
+						</a>
+					</c:if>
+				
+					<c:if test="${loginUser.getType()==1}">
+						<a href="${pageContext.request.contextPath}/ProductServlet?method=editProductByPid&pid=${c.pid}">
+							<img src="${c.pimage}" width="130" height="130" style="display: inline-block;">
+						</a>
+					</c:if>
+					
 					<p><a href="${pageContext.request.contextPath}/ProductServlet?method=findProductByPid&pid=${c.pid}" style='color:#666'>${c.pname}</a></p>
 					<p><font color="#E4393C" style="font-size:16px">$${c.price}</font></p>
 				</div>

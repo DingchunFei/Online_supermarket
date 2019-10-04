@@ -6,6 +6,7 @@ public class User {
 	private String password;
 	private String email;
 	private String gender;
+	private Integer type;
 
 	
 	public User(String uid, String username, String password, String email, String gender) {
@@ -68,10 +69,19 @@ public class User {
 	}
 
 
+	public Integer getType() {
+		return type;
+	}
+
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
 		return "User [uid=" + uid + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", gender=" + gender + "]";
+				+ ", gender=" + gender + ", type=" + type + "]";
 	}
 
 

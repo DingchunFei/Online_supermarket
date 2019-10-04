@@ -49,6 +49,7 @@
 			    <div class="col-sm-6">
 			      <input type="email" name="email" class="form-control" id="inputEmail3" value="${sessionScope.loginUser.email}">
 					<input type="hidden"  name="uid" class="form-control"  value="${sessionScope.loginUser.uid}">
+					<input type="hidden" name="type" value="${sessionScope.loginUser.type}"> 
 				</div>
 			  </div>
 
@@ -58,10 +59,10 @@
 
 					<c:if test ="${sessionScope.loginUser.gender=='male'}">
 						<label class="radio-inline">
-							<input type="radio" name="sex" id="inlineRadio1" value="male" checked="checked"> Male
+							<input type="radio" name="gender" id="inlineRadio1" value="male" checked="checked"> Male
 						</label>
 						<label class="radio-inline">
-							 <input type="radio" name="sex" id="inlineRadio2" value="female"> Female
+							 <input type="radio" name="gender" id="inlineRadio2" value="female"> Female
 						</label>
 					</c:if>
 
@@ -73,9 +74,20 @@
 							 <input type="radio" name="gender" id="inlineRadio2" value="female" checked="checked"> Female
 						</label>
 					</c:if>
-
 					</div>
 			  </div>		
+			  
+			  <div class="form-group opt">  
+				  <label class="col-sm-2 control-label">Duty</label>
+				  <div class="col-sm-6">
+					<c:if test = "${sessionScope.loginUser.type==1}">
+					    <div class="col-sm-6">
+					    	<input name="duty" class="form-control" id="duty" value="${sessionScope.loginUser.duty}">
+						</div>
+					</c:if>
+					</div>
+			  </div>	
+			  
 			 
 			  <div class="form-group">
 			    <div class="col-sm-offset-2 col-sm-10">

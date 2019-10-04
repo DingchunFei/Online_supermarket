@@ -20,4 +20,8 @@ public class IdentityMap{
         return (Product) productMap.get(pid);
     }
     
+    public static Product removeProduct(String pid) {
+        return (Product) productMap.remove(pid);
+    }
+    
 }

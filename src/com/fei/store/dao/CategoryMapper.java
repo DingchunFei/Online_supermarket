@@ -6,4 +6,12 @@ import java.util.List;
 
 public interface CategoryMapper {
     List<Category> getAllCats() throws Exception;
+
+	public Integer getCatsDependencies(Category cate);
+
+	void addCategory(Category category);
+
+	void delCategory(String cid);
+
+	void editCategory(Category category);
 }

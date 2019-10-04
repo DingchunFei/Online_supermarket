@@ -123,4 +123,66 @@ public class ProductMapperImpl implements ProductMapper {
         }
         return list;
     }
+
+	@Override
+	public int insertProduct(Product product) throws Exception {
+		try {
+			PreparedStatement stmt = DBConnection.prepare("INSERT into t_product values(?,?,?,?,?,?)");
+			stmt.setString(1, product.getPid());
+			stmt.setString(2, product.getPname());
+			stmt.setDouble(3, product.getPrice());
+			stmt.setString(4, product.getPimage());
+			stmt.setString(5, product.getCid());
+			stmt.setString(6, product.getPdesc().getDescription());
+            
+			int rs=stmt.executeUpdate();
+			DBConnection.commit();
+		
+			return rs;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public int editProduct(Product product) {
+		try {
+			PreparedStatement stmt = DBConnection.prepare("UPDATE t_product SET pname=?, price=?, pimage=?, cid=?, pdes=? WHERE pid=?");
+			stmt.setString(1, product.getPname());
+			stmt.setDouble(2, product.getPrice());
+			stmt.setString(3, product.getPimage());
+			stmt.setString(4, product.getCid());
+			stmt.setString(5, product.getPdesc().getDescription());
+			stmt.setString(6, product.getPid());
+
+			int rs=stmt.executeUpdate();
+			DBConnection.commit();
+		
+			return rs;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public int delProduct(String pid) {
+		try {
+			PreparedStatement stmt = DBConnection.prepare("DELETE FROM t_product WHERE pid=?");
+
+			stmt.setString(1, pid);
+
+			int rs=stmt.executeUpdate();
+			DBConnection.commit();
+		
+			return rs;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
 }

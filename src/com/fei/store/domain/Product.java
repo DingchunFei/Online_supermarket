@@ -20,7 +20,15 @@ public class Product implements Comparable<Product> {
 
     }
 
-    public Product(String pid, String pname, double price, String pimage, String cid) {
+    public Product(String pname, double price, String cid, Description pdesc) {
+		super();
+		this.pname = pname;
+		this.price = price;
+		this.cid = cid;
+		this.pdesc = pdesc;
+	}
+
+	public Product(String pid, String pname, double price, String pimage, String cid) {
         this.pid = pid;
         this.pname = pname;
         this.price = price;
@@ -28,7 +36,15 @@ public class Product implements Comparable<Product> {
         this.cid = cid;
     }
 
-
+    public Product(String pname, double price, String pimage, String cid, Description pdesc) {
+		super();
+		this.pname = pname;
+		this.price = price;
+		this.pimage = pimage;
+		this.cid = cid;
+		this.pdesc = pdesc;
+	}
+    
     public Product(String pid, String pname, double price, String pimage, String cid, Description pdesc) {
 		super();
 		this.pid = pid;

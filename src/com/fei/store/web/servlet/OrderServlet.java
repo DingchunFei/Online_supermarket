@@ -68,9 +68,7 @@ public class OrderServlet extends BaseServlet {
 		List<Order> orders=OrderService.findMyOrders(user);
 		//将PageModel放入request
 		req.setAttribute("orders", orders);
-		System.out.println("++++++++++++++++++++++++++++++++++++++++++++");
 		System.out.println(orders);
-		System.out.println("____________________________________________");
 		//转发到/jsp/order_list.jsp
 		return "/jsp/order_list.jsp";
 
@@ -86,6 +84,18 @@ public class OrderServlet extends BaseServlet {
 
 		return null;
 
+	}
+	
+	public String viewAllOrdersUI(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+
+		OrderService OrderService=new OrderServiceImp();
+		
+		List<Order> orders=OrderService.findAllOrders();
+		//将PageModel放入request
+		req.setAttribute("orders", orders);
+		System.out.println(orders);
+		//转发到/jsp/order_list.jsp
+		return "/jsp/order_list.jsp";
 	}
 
 

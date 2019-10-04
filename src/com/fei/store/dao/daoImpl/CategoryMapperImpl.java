@@ -35,4 +35,68 @@ public class CategoryMapperImpl implements CategoryMapper {
 
     }
 
+	@Override
+	public Integer getCatsDependencies(Category cate) {
+
+        try {
+            PreparedStatement stmt = DBConnection.prepare("SELECT count(*) from t_product WHERE cid=?");
+			stmt.setString(1, cate.getCid());
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return Integer.parseInt(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return 0;
+	}
+
+	@Override
+	public void addCategory(Category category) {
+		try {
+			PreparedStatement stmt = DBConnection.prepare("INSERT into t_category values(?,?)");
+			stmt.setString(1, category.getCid());
+			stmt.setString(2, category.getCname());
+			stmt.executeUpdate();
+			DBConnection.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void delCategory(String cid) {
+		try {
+			PreparedStatement stmt = DBConnection.prepare("DELETE FROM t_category WHERE cid=?");
+
+			stmt.setString(1, cid);
+
+			int rs=stmt.executeUpdate();
+			DBConnection.commit();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void editCategory(Category category) {
+		try {
+			PreparedStatement stmt = DBConnection.prepare("UPDATE t_category SET cname=? WHERE cid=?");
+			
+			stmt.setString(1, category.getCname());
+			stmt.setString(2, category.getCid());
+			
+			stmt.executeUpdate();
+			DBConnection.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

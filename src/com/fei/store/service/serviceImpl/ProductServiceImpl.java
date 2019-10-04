@@ -8,8 +8,10 @@ import com.fei.store.domain.Category;
 import com.fei.store.domain.Product;
 import com.fei.store.orbd.IdentityMap;
 import com.fei.store.service.ProductService;
+import com.fei.store.utils.UUIDUtils;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ProductServiceImpl implements ProductService {
 
@@ -46,4 +48,29 @@ public class ProductServiceImpl implements ProductService {
         ProductMapper productDao = new ProductMapperImpl();
         return productDao.getProductsByName(pname);
     }
+
+	@Override
+	public int insertProduct(Product product) throws Exception {
+		product.setPid(UUIDUtils.getId());
+		System.out.print(product);
+        ProductMapper productDao = new ProductMapperImpl();
+        return productDao.insertProduct(product);
+	}
+
+	@Override
+	public int editProduct(Product product) {
+
+		IdentityMap.removeProduct(product.getPid());
+
+		ProductMapper productDao = new ProductMapperImpl();
+        return productDao.editProduct(product);
+	}
+
+	@Override
+	public int delProduct(String pid) {
+		IdentityMap.removeProduct(pid);
+
+		ProductMapper productDao = new ProductMapperImpl();
+        return productDao.delProduct(pid);
+	}
 }

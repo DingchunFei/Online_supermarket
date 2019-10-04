@@ -16,9 +16,7 @@
 	<body>
 	<div class="container-fluid">
 
-			<!--
-            	描述：菜单栏
-            -->
+
 			<div class="container-fluid">
 <%--				<div class="col-md-4">--%>
 <%--					<img src="${pageContext.request.contextPath}/img/logo2.png" />--%>
@@ -37,15 +35,25 @@
 							<li>Welcome ${loginUser.username}</li>
 							<li><a href="${pageContext.request.contextPath}/UserServlet?method=userLogout">Logout</a></li>
 							<li><a href="${pageContext.request.contextPath}/UserServlet?method=editProfileUI">Edit Profile</a></li>
-							<li><a href="${pageContext.request.contextPath}/jsp/cart.jsp">Cart</a></li>
-							<li><a href="${pageContext.request.contextPath}/OrderServlet?method=findMyOrders">Orders</a></li>
+							
+							<!-- customer's view -->
+							<c:if test="${loginUser.getType()==0}">
+								<li><a href="${pageContext.request.contextPath}/jsp/cart.jsp">Cart</a></li>
+								<li><a href="${pageContext.request.contextPath}/OrderServlet?method=findMyOrders">Orders</a></li>
+							</c:if>
+								
+							<!-- admin user's view -->
+							<c:if test="${loginUser.getType()==1}">
+								<li><a href="${pageContext.request.contextPath}/ProductServlet?method=insertProductUI">Add product</a></li>
+								<li><a href="${pageContext.request.contextPath}/CategoryServlet?method=editCategoryUI">Edit Category</a></li>
+								<li><a href="${pageContext.request.contextPath}/OrderServlet?method=viewAllOrdersUI">View All Orders</a></li>
+								<li><a href="${pageContext.request.contextPath}/UserServlet?method=viewAllUserUI">View All Users</a></li>
+							</c:if>
 						</c:if>
 					</ol>
 				</div>
 			</div>
-		<!--
-描述：导航条
--->
+
 		<div class="container-fluid">
 			<nav class="navbar navbar-inverse">
 				<div class="container-fluid">
@@ -83,14 +91,11 @@
 
 <script>
 	$(function(){
-		//向服务端CategoryServlet__>gteAllCats发起ajax请求,服务端经过处理,
-		//将所有分类信息以JSON格式的数据返回,获取到返回的所有分类绑定在页面的显示分类区域
+		
 		var url="${pageContext.request.contextPath}/CategoryServlet";
 		var obj={"method":"findAllCats"};
 		$.post(url,obj,function(data){
-			//alert(data);
-
-			//获取到服务端响应会的数据,经过观察data中存放的是一个JSON格式数组,遍历数组,动态的显示分类区域代码
+			
 			$.each(data,function(i,obj){
 				var li="<li><a href='${pageContext.request.contextPath}/ProductServlet?method=findProductsByCid&cid="+obj.cid+"'>"+obj.cname+"</a></li>";
 				$("#myUL").append(li);

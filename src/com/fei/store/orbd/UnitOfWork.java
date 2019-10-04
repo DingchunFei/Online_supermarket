@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fei.store.dao.UserMapper;
+import com.fei.store.domain.AdminUser;
 import com.fei.store.domain.User;
 
 public class UnitOfWork implements IUnitOfWork<User> {
@@ -83,7 +84,10 @@ public class UnitOfWork implements IUnitOfWork<User> {
 	  private void commitModify() throws SQLException {
 	    List<User> modifiedUsers = map.get(IUnitOfWork.MODIFY);
 	    for (User user : modifiedUsers) {
-	      //LOGGER.info("Modifying {} to database.", student.getName());
+	    	if(user.getType()==1){
+	    		AdminUser adminUser = (AdminUser) user;
+	    		userMapper.adminUserModify(adminUser);
+	    	}
 	    	userMapper.userModify(user);
 	    }
 	  }

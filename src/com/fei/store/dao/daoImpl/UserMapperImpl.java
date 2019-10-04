@@ -3,8 +3,12 @@ package com.fei.store.dao.daoImpl;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fei.store.dao.UserMapper;
+import com.fei.store.domain.AdminUser;
+import com.fei.store.domain.Product;
 import com.fei.store.domain.User;
 import com.fei.store.utils.DBConnection;
 import org.apache.commons.dbutils.QueryRunner;
@@ -12,7 +16,6 @@ import org.junit.Test;
 
 
 public class UserMapperImpl implements UserMapper {
-
 
 	@Override
 	public void userModify(User user) throws SQLException {
@@ -94,7 +97,7 @@ public class UserMapperImpl implements UserMapper {
 	public void userLoginCheck(User user) throws SQLException {
 		
 		try {
-			PreparedStatement stmt = DBConnection.prepare("SELECT uid from t_user where username=? and password=?");
+			PreparedStatement stmt = DBConnection.prepare("SELECT uid,type from t_user where username=? and password=?");
 
 			stmt.setString(1, user.getUsername());
 			stmt.setString(2, user.getPassword());
@@ -103,8 +106,8 @@ public class UserMapperImpl implements UserMapper {
 
 			if(rs.next()){
 				user.setUid(rs.getString(1));			//If UID!=null, login success; else fail;
+				user.setType(rs.getInt(2));				//set User type to check whether it is a admin account
 			}
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -127,8 +130,7 @@ public class UserMapperImpl implements UserMapper {
 			if(rs.next()){
 				user.setEmail(rs.getString(1));			//Lazy Initialization, 
 				System.out.println(rs.getString(1));	
-				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");	
-
+				
 				user.setGender(rs.getString(2));
 				System.out.println(rs.getString(2));	
 
@@ -137,6 +139,70 @@ public class UserMapperImpl implements UserMapper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void adminLogin(AdminUser adminUser) {
+		try {
+			PreparedStatement stmt = DBConnection.prepare("SELECT duty from t_admin where uid=?");
+
+			stmt.setString(1, adminUser.getUid());
+
+			ResultSet rs = stmt.executeQuery();
+
+			if(rs.next()){
+				adminUser.setDuty(rs.getString(1));		
+				System.out.println(rs.getString(1));		
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void adminUserModify(AdminUser adminUser) {
+		try {
+
+			PreparedStatement stmt = DBConnection.prepare("UPDATE t_admin SET duty=? WHERE uid=?");
+
+			stmt.setString(1, adminUser.getDuty());
+			stmt.setString(2, adminUser.getUid());
+			
+			stmt.executeUpdate();
+
+			DBConnection.commit();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public List<User> viewAllUserUI() {
+		 List<User> list = new ArrayList<>();
+
+        try {
+            PreparedStatement stmt = DBConnection.prepare("SELECT uid,username,email,gender,type from t_user");
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setUid(rs.getString(1));
+                user.setUsername(rs.getString(2));
+                user.setEmail(rs.getString(3));
+                user.setGender(rs.getString(4));
+                user.setType(rs.getInt(5));
+               
+                list.add(user);
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return list;
 	}
 
 }

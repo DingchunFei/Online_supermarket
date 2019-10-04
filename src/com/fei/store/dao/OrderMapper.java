@@ -19,6 +19,8 @@ public interface OrderMapper {
     void deleteOrder(Connection conn , String oid) throws Exception;
 
     void deleteOrderItem(Connection conn , String oid) throws Exception;
+
+	public List<Order> findMyOrders() throws Exception;
 }
 
 

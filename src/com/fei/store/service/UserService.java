@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fei.store.dao.UserMapper;
 import com.fei.store.dao.daoImpl.UserMapperImpl;
+import com.fei.store.domain.AdminUser;
 import com.fei.store.domain.User;
 import com.fei.store.orbd.UnitOfWork;
 
@@ -28,4 +29,10 @@ public interface UserService {
 	void userLogin(User user) throws SQLException;
 
 	public void userEdit(User user) throws SQLException;
+
+	public void adminLogin(AdminUser adminUser);
+
+	public List<User> viewAllUserUI();
+	
+
 }

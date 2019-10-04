@@ -145,6 +145,31 @@ public class OrderMapperImp implements OrderMapper {
 
 	}
 
+	@Override
+	public List<Order> findMyOrders() throws Exception {
+		List<Order> orders = new LinkedList<>();
+		try {
+			PreparedStatement stmt = DBConnection.prepare("SELECT * from t_orders");
+			
+			ResultSet rs = stmt.executeQuery();
+
+			while(rs.next()){
+				Order order = new Order();
+				order.setOid(rs.getString(1));
+				order.setTotal(rs.getDouble(2));
+				order.setState(rs.getInt(4));
+				order.setAddress(rs.getString(5));
+				List<OrderItem> orderItems = this.findOrderByOid(rs.getString(1));
+				order.setList(orderItems);
+				orders.add(order);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return orders;
+	}
+
 
 
 

@@ -1,9 +1,11 @@
 package com.fei.store.service.serviceImpl;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.fei.store.dao.UserMapper;
 import com.fei.store.dao.daoImpl.UserMapperImpl;
+import com.fei.store.domain.AdminUser;
 import com.fei.store.domain.User;
 import com.fei.store.service.UserService;
 
@@ -37,5 +39,17 @@ public class UserServiceImpl implements UserService {
 			UserMapper userMapper = new UserMapperImpl();		
 			userMapper.userInfo(user);
 		}
+	}
+
+	@Override
+	public void adminLogin(AdminUser adminUser) {
+		UserMapper userMapper = new UserMapperImpl();
+		userMapper.adminLogin(adminUser);
+	}
+
+	@Override
+	public List<User> viewAllUserUI() {
+		UserMapper userMapper = new UserMapperImpl();
+		return userMapper.viewAllUserUI();
 	}
 }

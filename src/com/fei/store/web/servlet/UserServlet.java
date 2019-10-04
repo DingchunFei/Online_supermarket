@@ -3,6 +3,7 @@ package com.fei.store.web.servlet;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.fei.store.domain.AdminUser;
 import com.fei.store.domain.User;
 import com.fei.store.service.UserService;
 import com.fei.store.service.serviceImpl.UserServiceImpl;
@@ -54,10 +56,29 @@ public class UserServlet extends BaseServlet {
 	 */
 	public String editProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 		
-		User user = new User();
 		UserService userService = new UserServiceImpl();
-		MyBeanUtils.populate(user,request.getParameterMap());
-		
+		User user;
+	
+		String uid = request.getParameter("uid");
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String email = request.getParameter("email");
+		String gender = request.getParameter("gender");
+		if(Integer.parseInt(request.getParameter("type"))==0){
+			user = new User(uid,username,password,email,gender);
+			user.setType(0);
+		}else{
+			AdminUser adminUser = new AdminUser();
+			adminUser.setUid(uid);
+			adminUser.setUsername(username);
+			adminUser.setPassword(password);
+			adminUser.setGender(gender);
+			adminUser.setEmail(email);
+			adminUser.setDuty(request.getParameter("duty"));
+			adminUser.setType(1);
+			user = adminUser;
+		}
+	
 		try{
 			userService.userEdit(user);
 			request.getSession().setAttribute("loginUser",user);
@@ -83,13 +104,6 @@ public class UserServlet extends BaseServlet {
 		request.getSession().setAttribute("loginUser",user);
 		response.sendRedirect(request.getContextPath()+"/IndexServlet");
 		return null;
-/*		if(userService.userRegister(user)==0){
-			request.setAttribute("msg", "用户注册成功！");
-			return  "/jsp/info.jsp";
-		}else{
-			request.setAttribute("msg", "用户注册失败！");
-			return  "/jsp/register.jsp";
-		}*/
 	}
 
 	public String userLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
@@ -100,7 +114,17 @@ public class UserServlet extends BaseServlet {
 
 		try{
 			userService.userLogin(user);
-			request.getSession().setAttribute("loginUser",user);
+			
+			if(user.getType()==1){			//if Type==1, it means this is an admin user, so we need to fetch extra field
+				AdminUser adminUser = new AdminUser();
+				adminUser.setType(1);
+				adminUser.setUid(user.getUid());
+				adminUser.setUsername(user.getUsername());
+				userService.adminLogin(adminUser);
+				request.getSession().setAttribute("loginUser",adminUser);
+			}else{
+				request.getSession().setAttribute("loginUser",user);
+			}
 			response.sendRedirect(request.getContextPath()+"/IndexServlet");
 			return null;
 		}catch (Exception e) {
@@ -118,6 +142,17 @@ public class UserServlet extends BaseServlet {
 		response.sendRedirect(request.getContextPath()+"/jsp/login.jsp");
 		return null;
 	}
+	
+	public String viewAllUserUI(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+
+		UserService userService = new UserServiceImpl();
+		List<User> users = userService.viewAllUserUI();
+		
+		request.setAttribute("users", users);
+		return "/jsp/users.jsp";
+	}
+	
+	
 	/*//userExists
 	public String userExists(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		//接受用户名
